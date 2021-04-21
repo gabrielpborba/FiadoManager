@@ -41,11 +41,12 @@ public class LoginService {
 
     public LoginResponseDTO login(LoginRequestDTO userRequestDTO) throws Exception {
 
-        LoginResponseDTO loginResponseDTO = null;
+        LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
         try {
             Users findUser = loginRepository.findByUsername(userRequestDTO.getUsername());
-            if (findUser.getUsername().equals(userRequestDTO.getUsername()) && findUser.getPassword().equals(userRequestDTO.getPassword())) {
-                               loginResponseDTO.setUsername(findUser.getUsername());
+            if (findUser != null && findUser.getUsername().equals(userRequestDTO.getUsername()) && findUser.getPassword().equals(userRequestDTO.getPassword())) {
+                loginResponseDTO.setId(findUser.getId());
+                loginResponseDTO.setUsername(findUser.getUsername());
                 loginResponseDTO.setPassword(findUser.getPassword());
                 return loginResponseDTO;
             } else {

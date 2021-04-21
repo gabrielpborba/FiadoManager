@@ -10,7 +10,11 @@ import javax.persistence.*;
 public class Users {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "SQ_USERS")
+    @SequenceGenerator(
+            name = "SQ_USERS",
+            sequenceName = "SQ_USERS",
+            allocationSize = 1)
     @Column(name = "ID_USER")
     private Long id;
 
