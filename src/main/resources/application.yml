@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@fiadodb.csgygxiw6het.us-east-2.rds.amazonaws.com:1521/DATABASE
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    username: admin
+    password: Kkk0202#
