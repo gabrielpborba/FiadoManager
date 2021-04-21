@@ -12,7 +12,11 @@ import java.util.List;
 public class OrderSheet {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "SQ_USERS")
+    @SequenceGenerator(
+            name = "SQ_ORDERSHEET",
+            sequenceName = "SQ_ORDERSHEET",
+            allocationSize = 1)
     @Column(name = "ID_ORDERSHEET")
     private Long id;
 

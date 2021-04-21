@@ -8,10 +8,10 @@
 		<version>2.5.0-SNAPSHOT</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>teste2.teste2</groupId>
-	<artifactId>demo</artifactId>
+	<groupId>com.fiadomanager</groupId>
+	<artifactId>fiadomanager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
+	<name>Fiado Manager</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>16</java.version>
