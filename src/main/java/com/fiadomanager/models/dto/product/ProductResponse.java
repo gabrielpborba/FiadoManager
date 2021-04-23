@@ -1,8 +1,10 @@
 package com.fiadomanager.models.dto.product;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductResponse {
 
     private Long id;
@@ -10,9 +12,4 @@ public class ProductResponse {
     private Long value;
     private Integer quantity;
 
-    public ProductResponse() {
-    }
-
-    public ProductResponse(String s, String s1, long parseLong, int parseInt) {
-    }
 }

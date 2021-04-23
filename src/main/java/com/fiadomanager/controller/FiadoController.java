@@ -6,7 +6,9 @@ import com.fiadomanager.models.dto.ordersheet.AllOrderSheetResponseDTO;
 import com.fiadomanager.models.dto.ordersheet.NewOrderSheetResponseDTO;
 import com.fiadomanager.models.dto.ordersheet.OrderSheetRequestDTO;
 import com.fiadomanager.models.dto.ordersheet.OrderSheetResponseDTO;
-import com.fiadomanager.models.dto.product.ProductRequestDTO;
+import com.fiadomanager.models.dto.product.NewProductRequestDTO;
+import com.fiadomanager.models.dto.product.NewProductResponseDTO;
+import com.fiadomanager.models.dto.product.ProductResponseDTO;
 import com.fiadomanager.service.ClientService;
 import com.fiadomanager.service.OrderSheetService;
 import com.fiadomanager.service.ProductService;
@@ -28,7 +30,7 @@ public class FiadoController {
     private ProductService productService;
 
     @PostMapping(path = "/newClient")
-    private ResponseEntity<Boolean> newClients(@RequestBody NewClientRequestDTO newClientRequestDTO) throws Exception {
+    private ResponseEntity<Boolean> newClient(@RequestBody NewClientRequestDTO newClientRequestDTO) throws Exception {
         Boolean newClient = clientService.newClient(newClientRequestDTO);
         return ResponseEntity.status(newClient ? HttpStatus.OK : HttpStatus.CONFLICT).body(newClient);
     }
@@ -52,21 +54,27 @@ public class FiadoController {
     }
 
     @PostMapping(path = "/newProduct")
-    private ResponseEntity<Boolean> newProduct(@RequestBody ProductRequestDTO productRequestDTO) throws Exception {
-        Boolean newClient = productService.newProduct(productRequestDTO);
-        return ResponseEntity.status(newClient ? HttpStatus.OK : HttpStatus.CONFLICT).body(newClient);
+    private ResponseEntity<NewProductResponseDTO> newProduct(@RequestBody NewProductRequestDTO newProductRequestDTO) throws Exception {
+        NewProductResponseDTO newProduct = productService.newProduct(newProductRequestDTO);
+        return ResponseEntity.status(null != newProduct ? HttpStatus.OK : HttpStatus.CONFLICT).body(newProduct);
     }
 
     @GetMapping(path = "/closedOrderSheets/{idOrderSheet}")
-    private ResponseEntity<Boolean> closedOrderSheets(@PathVariable("idOrderSheet") Long idOrderSheet) throws Exception {
-        Boolean newClient = orderSheetService.closedOrderSheet(idOrderSheet);
-        return ResponseEntity.status(newClient ? HttpStatus.OK : HttpStatus.CONFLICT).body(newClient);
+    private ResponseEntity<Boolean> closedOrderSheet(@PathVariable("idOrderSheet") Long idOrderSheet) {
+        Boolean closedOrderSheet = orderSheetService.closedOrderSheet(idOrderSheet);
+        return ResponseEntity.status(closedOrderSheet ? HttpStatus.OK : HttpStatus.CONFLICT).body(closedOrderSheet);
     }
 
     @PostMapping(path = "/newOrderSheet")
-    private ResponseEntity<NewOrderSheetResponseDTO> newOrderSheet(@RequestBody OrderSheetRequestDTO orderSheetRequestDTO) throws Exception {
-        NewOrderSheetResponseDTO newClient = orderSheetService.newOrderSheet(orderSheetRequestDTO);
-        return ResponseEntity.status(null != newClient ? HttpStatus.OK : HttpStatus.CONFLICT).body(newClient);
+    private ResponseEntity<NewOrderSheetResponseDTO> newOrderSheet(@RequestBody OrderSheetRequestDTO orderSheetRequestDTO) {
+        NewOrderSheetResponseDTO newOrderSheetResponseDTO = orderSheetService.newOrderSheet(orderSheetRequestDTO);
+        return ResponseEntity.status(null != newOrderSheetResponseDTO ? HttpStatus.OK : HttpStatus.CONFLICT).body(newOrderSheetResponseDTO);
+    }
+
+    @GetMapping(path = "/getAllProducts")
+    private ResponseEntity<ProductResponseDTO> getAllProducts() {
+        ProductResponseDTO productResponseDTO = productService.getAllProducts();
+        return ResponseEntity.status(null != productResponseDTO ? HttpStatus.OK : HttpStatus.CONFLICT).body(productResponseDTO);
     }
 
 
