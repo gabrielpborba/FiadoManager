@@ -23,7 +23,7 @@ public class ClientService {
                 Client client = new Client();
                 client.setName(newClientRequestDTO.getName());
                 client.setCellphone(newClientRequestDTO.getCellphone());
-                clientRepository.save(client);
+                clientRepository.saveAndFlush(client);
                 return true;
             } else {
                 return false;

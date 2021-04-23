@@ -8,11 +8,11 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name="ORDERSHEET")
+@Table(name = "ORDERSHEET")
 public class OrderSheet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "SQ_USERS")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "SQ_ORDERSHEET")
     @SequenceGenerator(
             name = "SQ_ORDERSHEET",
             sequenceName = "SQ_ORDERSHEET",
@@ -26,14 +26,22 @@ public class OrderSheet {
     @Column(name = "DATE_PAYMENT")
     private LocalDate datePayment;
 
-    @ManyToMany
-    @JoinTable(name="ORDERSHEET_PRODUCT", joinColumns=
-            {@JoinColumn(name="ID_ORDERSHEET")}, inverseJoinColumns=
-            {@JoinColumn(name="ID_PRODUCT")})
-    private List<Product> products;
-
     @ManyToOne
     @JoinColumn(name = "ID_CLIENT")
     private Client client;
+
+    @Column(name = "STATUS")
+    private Integer status;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "ORDERSHEET_PRODUCT",
+            joinColumns = { @JoinColumn(name = "ID_ORDERSHEET") },
+            inverseJoinColumns = { @JoinColumn(name = "ID_PRODUCT") })
+    private List<Product> products;
+
 
 }

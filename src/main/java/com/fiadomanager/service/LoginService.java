@@ -26,16 +26,15 @@ public class LoginService {
                 users.setUsername(userRequestDTO.getUsername());
                 users.setName(userRequestDTO.getName());
                 users.setPassword(userRequestDTO.getPassword());
-                loginRepository.save(users);
+                loginRepository.saveAndFlush(users);
             } else {
-                throw new Exception("Usuário já existe");
+                return false;
             }
 
-            return true;
         } catch (Exception e) {
             return false;
         }
-
+        return false;
     }
 
 

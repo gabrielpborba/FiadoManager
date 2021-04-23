@@ -4,9 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 
-@Data
 @Entity
 @Table(name="USERS")
+@Data
 public class Users {
 
     @Id
@@ -26,5 +26,6 @@ public class Users {
 
     @Column(name = "PASSWORD")
     private String password;
+
 
 }

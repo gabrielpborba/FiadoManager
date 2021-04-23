@@ -6,11 +6,11 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name="PRODUCT")
+@Table(name = "PRODUCT")
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "SQ_USERS")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "SQ_PRODUCT")
     @SequenceGenerator(
             name = "SQ_PRODUCT",
             sequenceName = "SQ_PRODUCT",
@@ -22,7 +22,6 @@ public class Product {
     private String description;
 
     @Column(name = "VALUE")
-    private String value;
-
+    private Long value;
 
 }

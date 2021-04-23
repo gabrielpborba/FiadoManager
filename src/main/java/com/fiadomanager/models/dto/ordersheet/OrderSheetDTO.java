@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class OrderSheetResponseDTO {
+public class OrderSheetDTO {
 
     private Long id;
     private LocalDate dateCreate;
