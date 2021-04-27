@@ -9,8 +9,10 @@ import com.fiadomanager.models.dto.product.ProductResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -61,7 +63,9 @@ public class ProductService {
                 ProductResponse productResponse = new ProductResponse();
                 productResponse.setId(product.getId());
                 productResponse.setDescription(product.getDescription());
-                productResponse.setValue(product.getValue());
+                Locale localBRL = new Locale("pt", "BR");
+                String valueFormatted = NumberFormat.getCurrencyInstance(localBRL).format(product.getValue());
+                productResponse.setValue(valueFormatted);
                 listProductResponse.add(productResponse);
             }
 

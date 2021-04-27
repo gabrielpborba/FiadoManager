@@ -9,7 +9,7 @@ public class ProductResponse {
 
     private Long id;
     private String description;
-    private Long value;
+    private String value;
     private Integer quantity;
 
 }

@@ -10,4 +10,5 @@ import java.util.List;
 public interface OrderSheetRepository extends JpaRepository<OrderSheet, Long> {
 
     List<OrderSheet> findByStatus(Integer status);
+
 }

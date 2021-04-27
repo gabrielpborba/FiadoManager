@@ -47,6 +47,12 @@ public class FiadoController {
         return ResponseEntity.status(null != orderSheetResponseDTO ? HttpStatus.OK : HttpStatus.CONFLICT).body(orderSheetResponseDTO);
     }
 
+    @GetMapping(path = "/getOrderSheets/idClient/{idClient}")
+    private ResponseEntity<OrderSheetResponseDTO> getOrderSheetsByIdClient(@PathVariable("idClient") Long idClient) throws Exception {
+        OrderSheetResponseDTO orderSheetResponseDTO = orderSheetService.getOrderSheetByIdClient(idClient);
+        return ResponseEntity.status(null != orderSheetResponseDTO ? HttpStatus.OK : HttpStatus.CONFLICT).body(orderSheetResponseDTO);
+    }
+
     @GetMapping(path = "/getOrderSheets/status/{status}")
     private ResponseEntity<AllOrderSheetResponseDTO> getOrderSheets(@PathVariable("status") String status) {
         AllOrderSheetResponseDTO allOrderSheetResponseDTO = orderSheetService.getAllOrderSheet(status);

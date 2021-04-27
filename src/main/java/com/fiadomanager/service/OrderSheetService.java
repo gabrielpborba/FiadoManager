@@ -72,6 +72,27 @@ public class OrderSheetService {
         }
     }
 
+    public OrderSheetResponseDTO getOrderSheetByIdClient(Long idClient) {
+        OrderSheetResponseDTO orderSheetResponseDTO = new OrderSheetResponseDTO();
+        AllOrderSheetResponseDTO listOrderSheet = getAllOrderSheet("1");
+
+        for (OrderSheetDTO orderSheet : listOrderSheet.getOrderSheets()) {
+            if (orderSheet.getClient().getId().equals(idClient)) {
+                orderSheetResponseDTO.setTotalValue(orderSheet.getTotalValue());
+                orderSheetResponseDTO.setClient(orderSheet.getClient());
+                orderSheetResponseDTO.setProducts(orderSheet.getProducts());
+                orderSheetResponseDTO.setDatePayment(orderSheet.getDatePayment());
+                orderSheetResponseDTO.setId(orderSheet.getId());
+                orderSheetResponseDTO.setDateCreate(orderSheet.getDateCreate());
+                orderSheetResponseDTO.setStatus(orderSheet.getStatus());
+                break;
+            }
+
+        }
+
+        return orderSheetResponseDTO;
+    }
+
     public AllOrderSheetResponseDTO getAllOrderSheet(String status) {
         AllOrderSheetResponseDTO allOrderSheetResponseDTO = new AllOrderSheetResponseDTO();
         List<OrderSheet> orderSheets = orderSheetRepository.findByStatus(Integer.valueOf(status));
@@ -79,38 +100,43 @@ public class OrderSheetService {
         List<OrderSheetDTO> listOrderSheetDTO = new ArrayList<>();
 
 
-        for (OrderSheet orderSheet : orderSheets) {
-            Long totalValue = 0l;
-            List<ProductDTO> listProductDTO = new ArrayList<>();
-            List<OrderSheetProduct> listOrderSheetProducts = orderSheetProductRepository.findByIdOrderSheet(orderSheet.getId());
+        if (!orderSheets.isEmpty()) {
 
-            OrderSheetDTO orderSheetDTO = new OrderSheetDTO();
-            orderSheetDTO.setId(orderSheet.getId());
-            orderSheetDTO.setDateCreate(orderSheet.getDateCreate());
-            orderSheetDTO.setDatePayment(orderSheet.getDatePayment());
-            orderSheetDTO.setClient(orderSheet.getClient());
-            orderSheetDTO.setStatus(orderSheet.getStatus());
+            for (OrderSheet orderSheet : orderSheets) {
+                Long totalValue = 0l;
+                List<ProductDTO> listProductDTO = new ArrayList<>();
+                List<OrderSheetProduct> listOrderSheetProducts = orderSheetProductRepository.findByIdOrderSheet(orderSheet.getId());
+
+                OrderSheetDTO orderSheetDTO = new OrderSheetDTO();
+                orderSheetDTO.setId(orderSheet.getId());
+                orderSheetDTO.setDateCreate(orderSheet.getDateCreate());
+                orderSheetDTO.setDatePayment(orderSheet.getDatePayment());
+                orderSheetDTO.setClient(orderSheet.getClient());
+                orderSheetDTO.setStatus(orderSheet.getStatus());
 
 
-            for (OrderSheetProduct orderSheetProduct : listOrderSheetProducts) {
-                Optional<Product> productFind = orderSheet.getProducts().stream().filter(product -> product.getId().equals(orderSheetProduct.getIdProduct())).findAny();
-                ;
-                ProductDTO productDTO = new ProductDTO();
-                productDTO.setIdProduct(productFind.get().getId());
-                productDTO.setDescription(productFind.get().getDescription());
-                productDTO.setValue(productFind.get().getValue());
-                productDTO.setQuantity(orderSheetProduct.getQuantity());
-                totalValue = totalValue + (productFind.get().getValue() * orderSheetProduct.getQuantity());
-                listProductDTO.add(productDTO);
+                for (OrderSheetProduct orderSheetProduct : listOrderSheetProducts) {
+                    Optional<Product> productFind = orderSheet.getProducts().stream().filter(product -> product.getId().equals(orderSheetProduct.getIdProduct())).findAny();
+                    ProductDTO productDTO = new ProductDTO();
+                    productDTO.setIdProduct(productFind.get().getId());
+                    productDTO.setDescription(productFind.get().getDescription());
+                    productDTO.setValue(productFind.get().getValue());
+                    productDTO.setQuantity(orderSheetProduct.getQuantity());
+                    totalValue = totalValue + (productFind.get().getValue() * orderSheetProduct.getQuantity());
+                    listProductDTO.add(productDTO);
+                }
+                Locale localBRL = new Locale("pt", "BR");
+                String totalValueFormatted = NumberFormat.getCurrencyInstance(localBRL).format(totalValue);
+                orderSheetDTO.setTotalValue(totalValueFormatted);
+                orderSheetDTO.setProducts(listProductDTO);
+                listOrderSheetDTO.add(orderSheetDTO);
             }
-            Locale localBRL = new Locale("pt", "BR");
-            String totalValueFormatted = NumberFormat.getCurrencyInstance(localBRL).format(totalValue);
-            orderSheetDTO.setTotalValue(totalValueFormatted);
-            orderSheetDTO.setProducts(listProductDTO);
-            listOrderSheetDTO.add(orderSheetDTO);
+            allOrderSheetResponseDTO.setOrderSheets(listOrderSheetDTO);
+            return allOrderSheetResponseDTO;
+        } else {
+            allOrderSheetResponseDTO.setOrderSheets(new ArrayList<>());
+            return allOrderSheetResponseDTO;
         }
-        allOrderSheetResponseDTO.setOrderSheets(listOrderSheetDTO);
-        return allOrderSheetResponseDTO;
 
     }
 
