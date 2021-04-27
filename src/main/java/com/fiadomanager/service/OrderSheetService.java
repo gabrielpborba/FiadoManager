@@ -194,4 +194,20 @@ public class OrderSheetService {
             return false;
         }
     }
+
+    public boolean deleteOrderSheet(Long idOrderSheet) {
+        Optional<OrderSheet> orderSheet = orderSheetRepository.findById(idOrderSheet);
+
+        if (null != orderSheet.get()) {
+            List<OrderSheetProduct> orderSheetProduct = orderSheetProductRepository.findByIdOrderSheet(orderSheet.get().getId());
+            for (OrderSheetProduct orderSheetProduct1 : orderSheetProduct) {
+                orderSheetProductRepository.delete(orderSheetProduct1);
+            }
+            orderSheetRepository.delete(orderSheet.get());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

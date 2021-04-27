@@ -84,4 +84,16 @@ public class FiadoController {
     }
 
 
+    @GetMapping(path = "/disableClient/{idClient}")
+    private ResponseEntity<Boolean> disableClient(@PathVariable("idClient") Long idClient) {
+        Boolean deleteClient = clientService.disableClient(idClient);
+        return ResponseEntity.status(deleteClient ? HttpStatus.OK : HttpStatus.CONFLICT).body(deleteClient);
+    }
+
+    @DeleteMapping(path = "/deleteOrderSheet/{idOrderSheet}")
+    private ResponseEntity<Boolean> deleteOrderSheet(@PathVariable("idOrderSheet") Long idOrderSheet) {
+        Boolean deleteClient = orderSheetService.deleteOrderSheet(idOrderSheet);
+        return ResponseEntity.status(deleteClient ? HttpStatus.OK : HttpStatus.CONFLICT).body(deleteClient);
+    }
+
 }

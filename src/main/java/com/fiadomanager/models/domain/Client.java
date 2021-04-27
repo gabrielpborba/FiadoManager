@@ -24,5 +24,8 @@ public class Client {
     @Column(name = "CELLPHONE")
     private String cellphone;
 
+    @Column(name = "STATUS")
+    private Integer status;
+
 
 }
