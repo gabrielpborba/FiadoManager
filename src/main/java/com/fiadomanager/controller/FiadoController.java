@@ -36,7 +36,7 @@ public class FiadoController {
     }
 
     @GetMapping(path = "/getClients")
-    private ResponseEntity<ClientResponseDTO> getClients() {
+    private ResponseEntity<ClientResponseDTO> getAllClients() {
         ClientResponseDTO clientResponseDTO = clientService.getClients();
         return ResponseEntity.status(null != clientResponseDTO ? HttpStatus.OK : HttpStatus.CONFLICT).body(clientResponseDTO);
     }
