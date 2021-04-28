@@ -7,7 +7,7 @@ public class ProductDTO {
 
     private Long idProduct;
     private String description;
-    private Long value;
+    private String value;
     private Long quantity;
 
 }
