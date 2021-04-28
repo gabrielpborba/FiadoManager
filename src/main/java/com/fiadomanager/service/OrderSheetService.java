@@ -56,7 +56,7 @@ public class OrderSheetService {
                     productDTO.setDescription(productFind.get().getDescription());
                     Locale localBRL = new Locale("pt", "BR");
                     String valueFormatted = NumberFormat.getCurrencyInstance(localBRL).format(productFind.get().getValue());
-                    productDTO.setValue(valueFormatted);
+                    productDTO.setValue(valueFormatted.replace(" ", ""));
                     productDTO.setQuantity(orderSheetProduct.getQuantity());
                     listProductDTO.add(productDTO);
                     totalValue = totalValue + (productFind.get().getValue() * orderSheetProduct.getQuantity());
@@ -124,7 +124,7 @@ public class OrderSheetService {
                     productDTO.setDescription(productFind.get().getDescription());
                     Locale localBRL = new Locale("pt", "BR");
                     String valueFormatted = NumberFormat.getCurrencyInstance(localBRL).format(productFind.get().getValue());
-                    productDTO.setValue(valueFormatted);
+                    productDTO.setValue(valueFormatted.replace(" ", ""));
                     productDTO.setQuantity(orderSheetProduct.getQuantity());
                     totalValue = totalValue + (productFind.get().getValue() * orderSheetProduct.getQuantity());
                     listProductDTO.add(productDTO);
