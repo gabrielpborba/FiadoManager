@@ -54,9 +54,10 @@ public class OrderSheetService {
                     ProductDTO productDTO = new ProductDTO();
                     productDTO.setIdProduct(productFind.get().getId());
                     productDTO.setDescription(productFind.get().getDescription());
+                    Long totalValueOfProduct = productFind.get().getValue() * orderSheetProduct.getQuantity();
                     Locale localBRL = new Locale("pt", "BR");
-                    String valueFormatted = NumberFormat.getCurrencyInstance(localBRL).format(productFind.get().getValue());
-                    productDTO.setValue(valueFormatted.replace(" ", ""));
+                    String valueFormatted = NumberFormat.getCurrencyInstance(localBRL).format(totalValueOfProduct);
+                    productDTO.setValue(valueFormatted.replace(" ", ""));
                     productDTO.setQuantity(orderSheetProduct.getQuantity());
                     listProductDTO.add(productDTO);
                     totalValue = totalValue + (productFind.get().getValue() * orderSheetProduct.getQuantity());
@@ -122,9 +123,10 @@ public class OrderSheetService {
                     ProductDTO productDTO = new ProductDTO();
                     productDTO.setIdProduct(productFind.get().getId());
                     productDTO.setDescription(productFind.get().getDescription());
+                    Long totalValueOfProduct = productFind.get().getValue() * orderSheetProduct.getQuantity();
                     Locale localBRL = new Locale("pt", "BR");
-                    String valueFormatted = NumberFormat.getCurrencyInstance(localBRL).format(productFind.get().getValue());
-                    productDTO.setValue(valueFormatted.replace(" ", ""));
+                    String valueFormatted = NumberFormat.getCurrencyInstance(localBRL).format(totalValueOfProduct);
+                    productDTO.setValue(valueFormatted.replace(" ", ""));
                     productDTO.setQuantity(orderSheetProduct.getQuantity());
                     totalValue = totalValue + (productFind.get().getValue() * orderSheetProduct.getQuantity());
                     listProductDTO.add(productDTO);
