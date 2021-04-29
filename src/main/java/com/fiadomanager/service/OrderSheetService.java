@@ -59,6 +59,7 @@ public class OrderSheetService {
                     String valueFormatted = NumberFormat.getCurrencyInstance(localBRL).format(totalValueOfProduct);
                     productDTO.setValue(valueFormatted.replace(" ", ""));
                     productDTO.setQuantity(orderSheetProduct.getQuantity());
+                    productDTO.setIdOrderSheetProduct(orderSheetProduct.getId());
                     listProductDTO.add(productDTO);
                     totalValue = totalValue + (productFind.get().getValue() * orderSheetProduct.getQuantity());
                 }
@@ -129,6 +130,7 @@ public class OrderSheetService {
                     productDTO.setValue(valueFormatted.replace(" ", ""));
                     productDTO.setQuantity(orderSheetProduct.getQuantity());
                     totalValue = totalValue + (productFind.get().getValue() * orderSheetProduct.getQuantity());
+                    productDTO.setIdOrderSheetProduct(orderSheetProduct.getId());
                     listProductDTO.add(productDTO);
                 }
                 Locale localBRL = new Locale("pt", "BR");

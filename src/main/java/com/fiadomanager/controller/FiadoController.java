@@ -96,4 +96,10 @@ public class FiadoController {
         return ResponseEntity.status(deleteClient ? HttpStatus.OK : HttpStatus.CONFLICT).body(deleteClient);
     }
 
+
+    @DeleteMapping(path = "/deleteProductFromAOrderSheet/{idOrderSheetProduct}")
+    private ResponseEntity<Boolean> deleteProductFromAOrderSheet(@PathVariable("idOrderSheetProduct") Long idOrderSheetProduct) {
+        Boolean deleteProductFromAOrderSheet = productService.deleteProductFromAOrderSheet(idOrderSheetProduct);
+        return ResponseEntity.status(deleteProductFromAOrderSheet ? HttpStatus.OK : HttpStatus.CONFLICT).body(deleteProductFromAOrderSheet);
+    }
 }

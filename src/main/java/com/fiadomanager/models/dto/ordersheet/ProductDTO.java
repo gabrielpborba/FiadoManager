@@ -9,5 +9,6 @@ public class ProductDTO {
     private String description;
     private String value;
     private Long quantity;
+    private Long idOrderSheetProduct;
 
 }

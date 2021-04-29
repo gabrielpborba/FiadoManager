@@ -1,6 +1,8 @@
 package com.fiadomanager.service;
 
+import com.fiadomanager.infrastructure.repository.OrderSheetProductRepository;
 import com.fiadomanager.infrastructure.repository.ProductRepository;
+import com.fiadomanager.models.domain.OrderSheetProduct;
 import com.fiadomanager.models.domain.Product;
 import com.fiadomanager.models.dto.product.NewProductRequestDTO;
 import com.fiadomanager.models.dto.product.NewProductResponseDTO;
@@ -20,6 +22,9 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private OrderSheetProductRepository orderSheetProductRepository;
 
     public NewProductResponseDTO newProduct(NewProductRequestDTO newProductRequestDTO) throws Exception {
 
@@ -75,4 +80,21 @@ public class ProductService {
             return null;
         }
     }
+
+
+    public boolean deleteProductFromAOrderSheet(Long idOrderSheetProduct) {
+
+        Optional<OrderSheetProduct> findOrderSheetProduct = orderSheetProductRepository.findById(idOrderSheetProduct);
+
+        if (null != findOrderSheetProduct.get()) {
+            OrderSheetProduct orderSheetProduct = new OrderSheetProduct();
+            orderSheetProduct.setId(findOrderSheetProduct.get().getId());
+            orderSheetProductRepository.delete(orderSheetProduct);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }
