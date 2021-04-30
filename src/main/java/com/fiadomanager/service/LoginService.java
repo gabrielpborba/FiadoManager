@@ -5,7 +5,9 @@ import com.fiadomanager.models.domain.Users;
 import com.fiadomanager.models.dto.login.LoginRequestDTO;
 import com.fiadomanager.models.dto.login.LoginResponseDTO;
 import com.fiadomanager.models.dto.login.UserRequestDTO;
+import com.fiadomanager.models.exception.FiadoManagerCustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,33 +17,32 @@ public class LoginService {
     private LoginRepository loginRepository;
 
 
-    public boolean newUser(UserRequestDTO userRequestDTO) {
+    public boolean newUser(UserRequestDTO userRequestDTO) throws FiadoManagerCustomException {
         try {
 
             Users findUser = loginRepository.findByUsername(userRequestDTO.getUsername());
-
-
             if (null == findUser) {
                 Users users = new Users();
                 users.setUsername(userRequestDTO.getUsername());
                 users.setName(userRequestDTO.getName());
                 users.setPassword(userRequestDTO.getPassword());
                 loginRepository.saveAndFlush(users);
+                return true;
             } else {
-                return false;
+                throw new FiadoManagerCustomException(HttpStatus.NOT_FOUND, "Usuário já existe");
             }
 
         } catch (Exception e) {
-            return false;
+            throw e;
         }
-        return false;
     }
 
 
-    public LoginResponseDTO login(LoginRequestDTO userRequestDTO) throws Exception {
+    public LoginResponseDTO login(LoginRequestDTO userRequestDTO) throws FiadoManagerCustomException {
 
-        LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
         try {
+            LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
+
             Users findUser = loginRepository.findByUsername(userRequestDTO.getUsername());
             if (findUser != null && findUser.getUsername().equals(userRequestDTO.getUsername()) && findUser.getPassword().equals(userRequestDTO.getPassword())) {
                 loginResponseDTO.setId(findUser.getId());
@@ -49,11 +50,11 @@ public class LoginService {
                 loginResponseDTO.setPassword(findUser.getPassword());
                 return loginResponseDTO;
             } else {
-                return null;
+                throw new FiadoManagerCustomException(HttpStatus.UNAUTHORIZED, "Usuário não permitido");
             }
 
         } catch (Exception e) {
-            throw new Exception("Erro de login");
+            throw e;
         }
     }
 }

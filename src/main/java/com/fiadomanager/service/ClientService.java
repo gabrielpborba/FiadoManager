@@ -4,7 +4,10 @@ import com.fiadomanager.infrastructure.repository.ClientRepository;
 import com.fiadomanager.models.domain.Client;
 import com.fiadomanager.models.dto.clients.ClientResponseDTO;
 import com.fiadomanager.models.dto.clients.NewClientRequestDTO;
+import com.fiadomanager.models.exception.FiadoManagerCustomException;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,51 +23,73 @@ public class ClientService {
     private OrderSheetService orderSheetService;
 
 
-    public boolean newClient(NewClientRequestDTO newClientRequestDTO) throws Exception {
-        Client findClient = clientRepository.findByCellphone(newClientRequestDTO.getCellphone());
-        if (null == findClient) {
-            Client client = new Client();
-            client.setName(newClientRequestDTO.getName());
-            client.setCellphone(newClientRequestDTO.getCellphone());
-            client.setStatus(1);
-            clientRepository.save(client);
-            return true;
-        } else {
-            Client updateClient = new Client();
-            updateClient.setId(findClient.getId());
-            updateClient.setName(newClientRequestDTO.getName());
-            updateClient.setCellphone(newClientRequestDTO.getCellphone());
-            updateClient.setStatus(1);
-            clientRepository.save(updateClient);
-            return true;
+    public boolean newClient(NewClientRequestDTO newClientRequestDTO) throws FiadoManagerCustomException {
+        try {
+            Client findClient = clientRepository.findByName(newClientRequestDTO.getName());
+
+            if (null != findClient) {
+                throw new FiadoManagerCustomException(HttpStatus.CONFLICT, "Já existe um cliente com esse nome");
+            }
+
+            if (Strings.isNullOrEmpty(String.valueOf(newClientRequestDTO.getIdClient()))) {
+                Client client = new Client();
+                client.setName(newClientRequestDTO.getName());
+                client.setCellphone(newClientRequestDTO.getCellphone());
+                client.setStatus(1);
+                clientRepository.save(client);
+                return true;
+            } else {
+                Client client = new Client();
+                client.setId(newClientRequestDTO.getIdClient());
+                client.setName(newClientRequestDTO.getName());
+                client.setCellphone(newClientRequestDTO.getCellphone());
+                client.setStatus(1);
+                clientRepository.save(client);
+                return true;
+            }
+
+        } catch (Exception e) {
+            throw e;
+        }
+
+    }
+
+    public ClientResponseDTO getClients() throws FiadoManagerCustomException {
+
+        try {
+            ClientResponseDTO clientResponseDTO = new ClientResponseDTO();
+            List<Client> clients = clientRepository.findByStatus(1);
+            if (!clients.isEmpty()) {
+                clientResponseDTO.setClients(clients);
+                return clientResponseDTO;
+            } else {
+                throw new FiadoManagerCustomException(HttpStatus.NOT_FOUND, "Nenhum cliente cadastrado");
+            }
+        } catch (Exception e) {
+            throw e;
         }
     }
 
-    public ClientResponseDTO getClients() {
-        ClientResponseDTO clientResponseDTO = new ClientResponseDTO();
-        List<Client> clients = clientRepository.findByStatus(1);
-        if (!clients.isEmpty()) {
-            clientResponseDTO.setClients(clients);
-            return clientResponseDTO;
-        } else {
-            return null;
-        }
-    }
+    public Boolean disableClient(Long idClient) throws FiadoManagerCustomException {
 
-    public Boolean disableClient(Long idClient) {
+        try {
 
-        Optional<Client> client = clientRepository.findById(idClient);
+            Optional<Client> client = clientRepository.findById(idClient);
 
-        if (null != client.get()) {
-            Client updateClient = new Client();
-            updateClient.setId(client.get().getId());
-            updateClient.setCellphone(client.get().getCellphone());
-            updateClient.setName(client.get().getName());
-            updateClient.setStatus(0);
-            clientRepository.save(updateClient);
-            return true;
-        } else {
-            return false;
+            if (!client.isEmpty()) {
+                Client updateClient = new Client();
+                updateClient.setId(client.get().getId());
+                updateClient.setCellphone(client.get().getCellphone());
+                updateClient.setName(client.get().getName());
+                updateClient.setStatus(0);
+                clientRepository.save(updateClient);
+                return true;
+            } else {
+                throw new FiadoManagerCustomException(HttpStatus.NOT_FOUND, "Cliente não encontrado");
+            }
+
+        } catch (Exception e) {
+            throw e;
         }
 
     }

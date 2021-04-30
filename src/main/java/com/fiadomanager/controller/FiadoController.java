@@ -9,6 +9,7 @@ import com.fiadomanager.models.dto.ordersheet.OrderSheetResponseDTO;
 import com.fiadomanager.models.dto.product.NewProductRequestDTO;
 import com.fiadomanager.models.dto.product.NewProductResponseDTO;
 import com.fiadomanager.models.dto.product.ProductResponseDTO;
+import com.fiadomanager.models.exception.FiadoManagerCustomException;
 import com.fiadomanager.service.ClientService;
 import com.fiadomanager.service.OrderSheetService;
 import com.fiadomanager.service.ProductService;
@@ -30,75 +31,75 @@ public class FiadoController {
     private ProductService productService;
 
     @PostMapping(path = "/newClient")
-    private ResponseEntity<Boolean> newClient(@RequestBody NewClientRequestDTO newClientRequestDTO) throws Exception {
+    private ResponseEntity<Boolean> newClient(@RequestBody NewClientRequestDTO newClientRequestDTO) throws FiadoManagerCustomException {
         Boolean newClient = clientService.newClient(newClientRequestDTO);
         return ResponseEntity.status(newClient ? HttpStatus.OK : HttpStatus.CONFLICT).body(newClient);
     }
 
     @GetMapping(path = "/getClients")
-    private ResponseEntity<ClientResponseDTO> getAllClients() {
+    private ResponseEntity<ClientResponseDTO> getAllClients() throws FiadoManagerCustomException {
         ClientResponseDTO clientResponseDTO = clientService.getClients();
         return ResponseEntity.status(null != clientResponseDTO ? HttpStatus.OK : HttpStatus.CONFLICT).body(clientResponseDTO);
     }
 
     @GetMapping(path = "/getOrderSheets/id/{id}")
-    private ResponseEntity<OrderSheetResponseDTO> getOrderSheets(@PathVariable("id") Long idOrderSheet) throws Exception {
+    private ResponseEntity<OrderSheetResponseDTO> getOrderSheets(@PathVariable("id") Long idOrderSheet) throws FiadoManagerCustomException {
         OrderSheetResponseDTO orderSheetResponseDTO = orderSheetService.getIdOrderSheet(idOrderSheet);
         return ResponseEntity.status(null != orderSheetResponseDTO ? HttpStatus.OK : HttpStatus.CONFLICT).body(orderSheetResponseDTO);
     }
 
     @GetMapping(path = "/getOrderSheets/idClient/{idClient}")
-    private ResponseEntity<OrderSheetResponseDTO> getOrderSheetsByIdClient(@PathVariable("idClient") Long idClient) throws Exception {
+    private ResponseEntity<OrderSheetResponseDTO> getOrderSheetsByIdClient(@PathVariable("idClient") Long idClient) throws FiadoManagerCustomException {
         OrderSheetResponseDTO orderSheetResponseDTO = orderSheetService.getOrderSheetByIdClient(idClient);
         return ResponseEntity.status(null != orderSheetResponseDTO ? HttpStatus.OK : HttpStatus.CONFLICT).body(orderSheetResponseDTO);
     }
 
     @GetMapping(path = "/getOrderSheets/status/{status}")
-    private ResponseEntity<AllOrderSheetResponseDTO> getOrderSheets(@PathVariable("status") String status) {
+    private ResponseEntity<AllOrderSheetResponseDTO> getOrderSheets(@PathVariable("status") String status) throws FiadoManagerCustomException {
         AllOrderSheetResponseDTO allOrderSheetResponseDTO = orderSheetService.getAllOrderSheet(status);
         return ResponseEntity.status(null != allOrderSheetResponseDTO ? HttpStatus.OK : HttpStatus.CONFLICT).body(allOrderSheetResponseDTO);
     }
 
     @PostMapping(path = "/newProduct")
-    private ResponseEntity<NewProductResponseDTO> newProduct(@RequestBody NewProductRequestDTO newProductRequestDTO) throws Exception {
+    private ResponseEntity<NewProductResponseDTO> newProduct(@RequestBody NewProductRequestDTO newProductRequestDTO) throws FiadoManagerCustomException {
         NewProductResponseDTO newProduct = productService.newProduct(newProductRequestDTO);
         return ResponseEntity.status(null != newProduct ? HttpStatus.OK : HttpStatus.CONFLICT).body(newProduct);
     }
 
     @GetMapping(path = "/closedOrderSheets/{idOrderSheet}")
-    private ResponseEntity<Boolean> closedOrderSheet(@PathVariable("idOrderSheet") Long idOrderSheet) {
+    private ResponseEntity<Boolean> closedOrderSheet(@PathVariable("idOrderSheet") Long idOrderSheet) throws FiadoManagerCustomException {
         Boolean closedOrderSheet = orderSheetService.closedOrderSheet(idOrderSheet);
         return ResponseEntity.status(closedOrderSheet ? HttpStatus.OK : HttpStatus.CONFLICT).body(closedOrderSheet);
     }
 
     @PostMapping(path = "/newOrderSheet")
-    private ResponseEntity<NewOrderSheetResponseDTO> newOrderSheet(@RequestBody OrderSheetRequestDTO orderSheetRequestDTO) {
+    private ResponseEntity<NewOrderSheetResponseDTO> newOrderSheet(@RequestBody OrderSheetRequestDTO orderSheetRequestDTO) throws FiadoManagerCustomException {
         NewOrderSheetResponseDTO newOrderSheetResponseDTO = orderSheetService.newOrderSheet(orderSheetRequestDTO);
         return ResponseEntity.status(null != newOrderSheetResponseDTO ? HttpStatus.OK : HttpStatus.CONFLICT).body(newOrderSheetResponseDTO);
     }
 
     @GetMapping(path = "/getAllProducts")
-    private ResponseEntity<ProductResponseDTO> getAllProducts() {
+    private ResponseEntity<ProductResponseDTO> getAllProducts() throws FiadoManagerCustomException {
         ProductResponseDTO productResponseDTO = productService.getAllProducts();
         return ResponseEntity.status(null != productResponseDTO ? HttpStatus.OK : HttpStatus.CONFLICT).body(productResponseDTO);
     }
 
 
     @GetMapping(path = "/disableClient/{idClient}")
-    private ResponseEntity<Boolean> disableClient(@PathVariable("idClient") Long idClient) {
+    private ResponseEntity<Boolean> disableClient(@PathVariable("idClient") Long idClient) throws FiadoManagerCustomException {
         Boolean deleteClient = clientService.disableClient(idClient);
         return ResponseEntity.status(deleteClient ? HttpStatus.OK : HttpStatus.CONFLICT).body(deleteClient);
     }
 
     @DeleteMapping(path = "/deleteOrderSheet/{idOrderSheet}")
-    private ResponseEntity<Boolean> deleteOrderSheet(@PathVariable("idOrderSheet") Long idOrderSheet) {
+    private ResponseEntity<Boolean> deleteOrderSheet(@PathVariable("idOrderSheet") Long idOrderSheet) throws FiadoManagerCustomException {
         Boolean deleteClient = orderSheetService.deleteOrderSheet(idOrderSheet);
         return ResponseEntity.status(deleteClient ? HttpStatus.OK : HttpStatus.CONFLICT).body(deleteClient);
     }
 
 
     @DeleteMapping(path = "/deleteProductFromAOrderSheet/{idOrderSheetProduct}")
-    private ResponseEntity<Boolean> deleteProductFromAOrderSheet(@PathVariable("idOrderSheetProduct") Long idOrderSheetProduct) {
+    private ResponseEntity<Boolean> deleteProductFromAOrderSheet(@PathVariable("idOrderSheetProduct") Long idOrderSheetProduct) throws FiadoManagerCustomException {
         Boolean deleteProductFromAOrderSheet = productService.deleteProductFromAOrderSheet(idOrderSheetProduct);
         return ResponseEntity.status(deleteProductFromAOrderSheet ? HttpStatus.OK : HttpStatus.CONFLICT).body(deleteProductFromAOrderSheet);
     }
