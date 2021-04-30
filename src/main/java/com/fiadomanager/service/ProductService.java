@@ -45,26 +45,25 @@ public class ProductService {
                     newProductResponseDTO.setIdProduct(product.get().getId());
                     return newProductResponseDTO;
                 } else {
-                    Product newProduct = new Product();
-                    Product findProduct = productRepository.findByDescription(newProductRequestDTO.getDescription());
-                    if (null == findProduct) {
-                        newProduct.setDescription(newProductRequestDTO.getDescription());
-                        newProduct.setValue(newProductRequestDTO.getValue());
-                        productRepository.save(newProduct);
-                        newProductResponseDTO.setIdProduct(newProduct.getId());
-                        return newProductResponseDTO;
-                    } else {
-                        throw new FiadoManagerCustomException(HttpStatus.CONFLICT, "Já existe um produto com esse nome");
-                    }
+                    throw new FiadoManagerCustomException(HttpStatus.CONFLICT, "Produto não encontrado");
+                }
+            } else {
+                Product newProduct = new Product();
+                Product findProduct = productRepository.findByDescription(newProductRequestDTO.getDescription());
+                if (null == findProduct) {
+                    newProduct.setDescription(newProductRequestDTO.getDescription());
+                    newProduct.setValue(newProductRequestDTO.getValue());
+                    productRepository.save(newProduct);
+                    newProductResponseDTO.setIdProduct(newProduct.getId());
+                    return newProductResponseDTO;
+                } else {
+                    throw new FiadoManagerCustomException(HttpStatus.CONFLICT, "Já existe um produto com esse nome");
                 }
             }
         } catch (Exception e) {
             throw e;
         }
-
-        return null;
     }
-
 
     public ProductResponseDTO getAllProducts() throws FiadoManagerCustomException {
 
