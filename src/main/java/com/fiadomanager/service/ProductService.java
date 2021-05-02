@@ -45,7 +45,7 @@ public class ProductService {
                     newProductResponseDTO.setIdProduct(product.get().getId());
                     return newProductResponseDTO;
                 } else {
-                    throw new FiadoManagerCustomException(HttpStatus.CONFLICT, "Produto não encontrado");
+                    throw new FiadoManagerCustomException(HttpStatus.NOT_FOUND, "Produto não encontrado");
                 }
             } else {
                 Product newProduct = new Product();
@@ -88,7 +88,7 @@ public class ProductService {
                 productResponseDTO.setProducts(listProductResponse);
                 return productResponseDTO;
             } else {
-                throw new FiadoManagerCustomException(HttpStatus.CONFLICT, "Nenhum produto encontrado");
+                throw new FiadoManagerCustomException(HttpStatus.NOT_FOUND, "Nenhum produto cadastrado");
             }
 
         } catch (Exception e) {
@@ -109,7 +109,7 @@ public class ProductService {
                 orderSheetProductRepository.delete(orderSheetProduct);
                 return true;
             } else {
-                throw new FiadoManagerCustomException(HttpStatus.CONFLICT, "Produto não encontrado na comanda");
+                throw new FiadoManagerCustomException(HttpStatus.NOT_FOUND, "Produto não encontrado na comanda");
             }
         } catch (Exception e) {
             throw e;
