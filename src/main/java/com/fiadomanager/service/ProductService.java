@@ -9,7 +9,6 @@ import com.fiadomanager.models.dto.product.NewProductResponseDTO;
 import com.fiadomanager.models.dto.product.ProductResponse;
 import com.fiadomanager.models.dto.product.ProductResponseDTO;
 import com.fiadomanager.models.exception.FiadoManagerCustomException;
-import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,7 @@ public class ProductService {
 
             NewProductResponseDTO newProductResponseDTO = new NewProductResponseDTO();
 
-            if (!Strings.isNullOrEmpty(String.valueOf(newProductRequestDTO.getIdProduct()))) {
+            if (newProductRequestDTO.getIdProduct() != null) {
                 Optional<Product> product = productRepository.findById(newProductRequestDTO.getIdProduct());
                 if (!product.isEmpty()) {
                     product.get().setValue(newProductRequestDTO.getValue());
