@@ -12,12 +12,10 @@ import com.fiadomanager.models.exception.FiadoManagerCustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -39,7 +37,7 @@ public class ProductService {
                 if (!product.isEmpty()) {
                     product.get().setValue(newProductRequestDTO.getValue());
                     product.get().setId(newProductRequestDTO.getIdProduct());
-                    product.get().setDescription(newProductRequestDTO.getDescription());
+                    product.get().setDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
                     productRepository.save(product.get());
                     newProductResponseDTO.setIdProduct(product.get().getId());
                     return newProductResponseDTO;
@@ -48,9 +46,9 @@ public class ProductService {
                 }
             } else {
                 Product newProduct = new Product();
-                Product findProduct = productRepository.findByDescription(newProductRequestDTO.getDescription());
+                Product findProduct = productRepository.findByDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
                 if (null == findProduct) {
-                    newProduct.setDescription(newProductRequestDTO.getDescription());
+                    newProduct.setDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
                     newProduct.setValue(newProductRequestDTO.getValue());
                     productRepository.save(newProduct);
                     newProductResponseDTO.setIdProduct(newProduct.getId());
@@ -84,6 +82,7 @@ public class ProductService {
                     listProductResponse.add(productResponse);
                 }
 
+                listProductResponse.sort(Comparator.comparing(ProductResponse::getDescription));
                 productResponseDTO.setProducts(listProductResponse);
                 return productResponseDTO;
             } else {

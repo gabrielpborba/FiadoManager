@@ -9,7 +9,9 @@ import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +27,7 @@ public class ClientService {
 
     public boolean newClient(NewClientRequestDTO newClientRequestDTO) throws FiadoManagerCustomException {
         try {
-            Client findClient = clientRepository.findByName(newClientRequestDTO.getName());
+            Client findClient = clientRepository.findByName(StringUtils.capitalize(newClientRequestDTO.getName()));
 
             if (null != findClient) {
                 throw new FiadoManagerCustomException(HttpStatus.CONFLICT, "Já existe um cliente com esse nome");
@@ -33,7 +35,7 @@ public class ClientService {
 
             if (Strings.isNullOrEmpty(String.valueOf(newClientRequestDTO.getIdClient()))) {
                 Client client = new Client();
-                client.setName(newClientRequestDTO.getName());
+                client.setName(StringUtils.capitalize(newClientRequestDTO.getName()));
                 client.setCellphone(newClientRequestDTO.getCellphone());
                 client.setStatus(1);
                 clientRepository.save(client);
@@ -41,7 +43,7 @@ public class ClientService {
             } else {
                 Client client = new Client();
                 client.setId(newClientRequestDTO.getIdClient());
-                client.setName(newClientRequestDTO.getName());
+                client.setName(StringUtils.capitalize(newClientRequestDTO.getName()));
                 client.setCellphone(newClientRequestDTO.getCellphone());
                 client.setStatus(1);
                 clientRepository.save(client);
@@ -60,6 +62,7 @@ public class ClientService {
             ClientResponseDTO clientResponseDTO = new ClientResponseDTO();
             List<Client> clients = clientRepository.findByStatus(1);
             if (!clients.isEmpty()) {
+                clients.sort(Comparator.comparing(Client::getName));
                 clientResponseDTO.setClients(clients);
                 return clientResponseDTO;
             } else {

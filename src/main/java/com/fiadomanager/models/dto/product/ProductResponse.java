@@ -12,4 +12,7 @@ public class ProductResponse {
     private String value;
     private Integer quantity;
 
+    public String getDescription() {
+        return description;
+    }
 }
