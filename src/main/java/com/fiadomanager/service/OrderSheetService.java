@@ -171,7 +171,6 @@ public class OrderSheetService {
                 OrderSheet orderSheet = new OrderSheet();
                 orderSheet.setClient(client.get());
                 orderSheet.setDateCreate(LocalDate.now());
-                orderSheet.setDatePayment(LocalDate.now());
                 orderSheet.setStatus(1);
                 OrderSheet newOrderSheet = orderSheetRepository.save(orderSheet);
                 if (!orderSheetRequestDTO.getProducts().isEmpty()) {
