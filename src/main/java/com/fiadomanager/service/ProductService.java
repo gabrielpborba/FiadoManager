@@ -35,7 +35,8 @@ public class ProductService {
             if (newProductRequestDTO.getIdProduct() != null) {
                 Optional<Product> product = productRepository.findById(newProductRequestDTO.getIdProduct());
                 if (!product.isEmpty()) {
-                    product.get().setValue(newProductRequestDTO.getValue());
+                     Double valueToDouble = Double.parseDouble(newProductRequestDTO.getValue());
+                    product.get().setValue(valueToDouble);
                     product.get().setId(newProductRequestDTO.getIdProduct());
                     product.get().setDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
                     productRepository.save(product.get());
@@ -48,8 +49,12 @@ public class ProductService {
                 Product newProduct = new Product();
                 Product findProduct = productRepository.findByDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
                 if (null == findProduct) {
+                    if (newProductRequestDTO.getValue().contains(",")) {
+                        newProductRequestDTO.setValue(newProductRequestDTO.getValue().replace(",", "."));
+                    }
+                    Double valueToDouble = Double.parseDouble(newProductRequestDTO.getValue());
                     newProduct.setDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
-                    newProduct.setValue(newProductRequestDTO.getValue());
+                    newProduct.setValue(valueToDouble);
                     productRepository.save(newProduct);
                     newProductResponseDTO.setIdProduct(newProduct.getId());
                     return newProductResponseDTO;

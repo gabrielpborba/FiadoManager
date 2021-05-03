@@ -30,7 +30,11 @@ public class ClientService {
             Client findClient = clientRepository.findByName(StringUtils.capitalize(newClientRequestDTO.getName()));
 
             if (null != findClient) {
-                throw new FiadoManagerCustomException(HttpStatus.CONFLICT, "Já existe um cliente com esse nome");
+                findClient.setName(StringUtils.capitalize(newClientRequestDTO.getName()));
+                findClient.setCellphone(newClientRequestDTO.getCellphone());
+                findClient.setStatus(1);
+                clientRepository.save(findClient);
+                return true;
             }
 
             if (Strings.isNullOrEmpty(String.valueOf(newClientRequestDTO.getIdClient()))) {

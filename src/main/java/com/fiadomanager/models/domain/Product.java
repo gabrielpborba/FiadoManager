@@ -22,6 +22,6 @@ public class Product {
     private String description;
 
     @Column(name = "VALUE")
-    private Long value;
+    private Double value;
 
 }

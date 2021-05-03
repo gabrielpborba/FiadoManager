@@ -10,6 +10,6 @@ import java.util.List;
 public class ProductResponseDTO {
 
     private List<ProductResponse> products;
-    private Long totalValue;
+    private String totalValue;
 
 }

@@ -7,7 +7,7 @@ public class ProductRequestDTO {
 
     private Long id;
     private String description;
-    private Long value;
+    private Double value;
     private String quantity;
 
 }

@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 @Service
 public class LoginService {
 
@@ -17,15 +20,16 @@ public class LoginService {
     private LoginRepository loginRepository;
 
 
-    public boolean newUser(UserRequestDTO userRequestDTO) throws FiadoManagerCustomException {
+    public boolean newUser(UserRequestDTO userRequestDTO) throws FiadoManagerCustomException, NoSuchAlgorithmException {
         try {
+
 
             Users findUser = loginRepository.findByUsername(userRequestDTO.getUsername());
             if (null == findUser) {
                 Users users = new Users();
                 users.setUsername(userRequestDTO.getUsername());
                 users.setName(userRequestDTO.getName());
-                users.setPassword(userRequestDTO.getPassword());
+                users.setPassword(encryptPassword(userRequestDTO.getPassword()));
                 loginRepository.saveAndFlush(users);
                 return true;
             } else {
@@ -38,13 +42,13 @@ public class LoginService {
     }
 
 
-    public LoginResponseDTO login(LoginRequestDTO userRequestDTO) throws FiadoManagerCustomException {
+    public LoginResponseDTO login(LoginRequestDTO userRequestDTO) throws FiadoManagerCustomException, NoSuchAlgorithmException {
 
         try {
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO();
 
             Users findUser = loginRepository.findByUsername(userRequestDTO.getUsername());
-            if (findUser != null && findUser.getUsername().equals(userRequestDTO.getUsername()) && findUser.getPassword().equals(userRequestDTO.getPassword())) {
+            if (findUser != null && findUser.getUsername().equals(userRequestDTO.getUsername()) && findUser.getPassword().equals(encryptPassword(userRequestDTO.getPassword()))) {
                 loginResponseDTO.setId(findUser.getId());
                 loginResponseDTO.setUsername(findUser.getUsername());
                 loginResponseDTO.setPassword(findUser.getPassword());
@@ -56,5 +60,17 @@ public class LoginService {
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    private String encryptPassword(String password) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] passBytes = password.getBytes();
+        md.reset();
+        byte[] digested = md.digest(passBytes);
+        StringBuffer passwordEncrypt = new StringBuffer();
+        for (int i = 0; i < digested.length; i++) {
+            passwordEncrypt.append(Integer.toHexString(0xff & digested[i]));
+        }
+        return passwordEncrypt.toString();
     }
 }

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.NoSuchAlgorithmException;
+
 @RestController
 public class LoginController {
 
@@ -19,13 +21,13 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping(path = "/newUser")
-    public ResponseEntity<Boolean> newUser(@RequestBody UserRequestDTO userRequestDTO) throws FiadoManagerCustomException {
+    public ResponseEntity<Boolean> newUser(@RequestBody UserRequestDTO userRequestDTO) throws FiadoManagerCustomException, NoSuchAlgorithmException {
         Boolean newUser = loginService.newUser(userRequestDTO);
         return ResponseEntity.status(newUser ? HttpStatus.OK : HttpStatus.CONFLICT).body(newUser);
     }
 
     @PostMapping(path = "/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) throws FiadoManagerCustomException {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) throws FiadoManagerCustomException, NoSuchAlgorithmException {
         LoginResponseDTO newUser = loginService.login(loginRequestDTO);
         return ResponseEntity.status(null != newUser ? HttpStatus.OK : HttpStatus.UNAUTHORIZED).body(newUser);
     }

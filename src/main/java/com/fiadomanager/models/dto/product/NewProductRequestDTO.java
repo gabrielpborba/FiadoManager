@@ -7,6 +7,6 @@ public class NewProductRequestDTO {
 
     private Long idProduct;
     private String description;
-    private Long value;
+    private String value;
 
 }

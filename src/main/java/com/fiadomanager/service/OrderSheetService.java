@@ -42,7 +42,7 @@ public class OrderSheetService {
             OrderSheetResponseDTO orderSheetResponseDTO = new OrderSheetResponseDTO();
             Optional<OrderSheet> orderSheet = orderSheetRepository.findById(idOrderSheet);
             List<ProductDTO> listProductDTO = new ArrayList<>();
-            Long totalValue = 0l;
+            double totalValue = 0l;
 
             if (! orderSheet.isEmpty()) {
                 List<OrderSheetProduct> listOrderSheetProducts = orderSheetProductRepository.findByIdOrderSheet(idOrderSheet);
@@ -56,7 +56,7 @@ public class OrderSheetService {
                     ProductDTO productDTO = new ProductDTO();
                     productDTO.setIdProduct(productFind.get().getId());
                     productDTO.setDescription(productFind.get().getDescription());
-                    Long totalValueOfProduct = productFind.get().getValue() * orderSheetProduct.getQuantity();
+                    double totalValueOfProduct = productFind.get().getValue() * orderSheetProduct.getQuantity();
                     Locale localBRL = new Locale("pt", "BR");
                     String valueFormatted = NumberFormat.getCurrencyInstance(localBRL).format(totalValueOfProduct);
                     productDTO.setValue(valueFormatted.replace(" ", ""));
@@ -116,7 +116,7 @@ public class OrderSheetService {
             if (!orderSheets.isEmpty()) {
 
                 for (OrderSheet orderSheet : orderSheets) {
-                    Long totalValue = 0l;
+                    double totalValue = 0l;
                     List<ProductDTO> listProductDTO = new ArrayList<>();
                     List<OrderSheetProduct> listOrderSheetProducts = orderSheetProductRepository.findByIdOrderSheet(orderSheet.getId());
 
@@ -133,7 +133,7 @@ public class OrderSheetService {
                         ProductDTO productDTO = new ProductDTO();
                         productDTO.setIdProduct(productFind.get().getId());
                         productDTO.setDescription(productFind.get().getDescription());
-                        Long totalValueOfProduct = productFind.get().getValue() * orderSheetProduct.getQuantity();
+                        double totalValueOfProduct = productFind.get().getValue() * orderSheetProduct.getQuantity();
                         Locale localBRL = new Locale("pt", "BR");
                         String valueFormatted = NumberFormat.getCurrencyInstance(localBRL).format(totalValueOfProduct);
                         productDTO.setValue(valueFormatted.replace(" ", ""));
