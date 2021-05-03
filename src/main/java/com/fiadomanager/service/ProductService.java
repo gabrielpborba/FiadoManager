@@ -32,39 +32,40 @@ public class ProductService {
 
             NewProductResponseDTO newProductResponseDTO = new NewProductResponseDTO();
 
-            if (newProductRequestDTO.getIdProduct() != null) {
-                Optional<Product> product = productRepository.findById(newProductRequestDTO.getIdProduct());
-                if (!product.isEmpty()) {
-                     Double valueToDouble = Double.parseDouble(newProductRequestDTO.getValue());
-                    product.get().setValue(valueToDouble);
-                    product.get().setId(newProductRequestDTO.getIdProduct());
-                    product.get().setDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
-                    productRepository.save(product.get());
-                    newProductResponseDTO.setIdProduct(product.get().getId());
+            if (newProductRequestDTO.getIdProduct() == null) {
+
+                Product findByDescription = productRepository.findByDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
+
+                if (null != findByDescription) {
+                    throw new FiadoManagerCustomException(HttpStatus.CONFLICT, "Já existe um produto com esse nome");
+                }
+
+                Product product = new Product();
+                Double valueToDouble = Double.parseDouble(newProductRequestDTO.getValue());
+                product.setValue(valueToDouble);
+                product.setDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
+                Product newProduct = productRepository.save(product);
+                newProductResponseDTO.setIdProduct(newProduct.getId());
+                return newProductResponseDTO;
+            } else {
+                Optional<Product> findProduct = productRepository.findById(newProductRequestDTO.getIdProduct());
+                if (!findProduct.isEmpty() && null != findProduct) {
+                    Double valueToDouble = Double.parseDouble(newProductRequestDTO.getValue());
+                    findProduct.get().setId(findProduct.get().getId());
+                    findProduct.get().setDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
+                    findProduct.get().setValue(valueToDouble);
+                    productRepository.save(findProduct.get());
+                    newProductResponseDTO.setIdProduct(findProduct.get().getId());
                     return newProductResponseDTO;
                 } else {
                     throw new FiadoManagerCustomException(HttpStatus.NOT_FOUND, "Produto não encontrado");
                 }
-            } else {
-                Product newProduct = new Product();
-                Product findProduct = productRepository.findByDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
-                if (null == findProduct) {
-                    if (newProductRequestDTO.getValue().contains(",")) {
-                        newProductRequestDTO.setValue(newProductRequestDTO.getValue().replace(",", "."));
-                    }
-                    Double valueToDouble = Double.parseDouble(newProductRequestDTO.getValue());
-                    newProduct.setDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
-                    newProduct.setValue(valueToDouble);
-                    productRepository.save(newProduct);
-                    newProductResponseDTO.setIdProduct(newProduct.getId());
-                    return newProductResponseDTO;
-                } else {
-                    throw new FiadoManagerCustomException(HttpStatus.CONFLICT, "Já existe um produto com esse nome");
-                }
             }
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             throw e;
         }
+
     }
 
     public ProductResponseDTO getAllProducts() throws FiadoManagerCustomException {
