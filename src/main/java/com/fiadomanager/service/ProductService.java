@@ -50,6 +50,9 @@ public class ProductService {
             } else {
                 Optional<Product> findProduct = productRepository.findById(newProductRequestDTO.getIdProduct());
                 if (!findProduct.isEmpty() && null != findProduct) {
+                    if (newProductRequestDTO.getValue().contains(",")) {
+                        newProductRequestDTO.setValue(newProductRequestDTO.getValue().replace(",", "."));
+                    }
                     Double valueToDouble = Double.parseDouble(newProductRequestDTO.getValue());
                     findProduct.get().setId(findProduct.get().getId());
                     findProduct.get().setDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));
