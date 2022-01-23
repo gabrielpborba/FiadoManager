@@ -31,7 +31,7 @@ public class LoginServiceImpl implements LoginService {
                 users.setUsername(userRequestDTO.getUsername());
                 users.setName(userRequestDTO.getName());
                 users.setPassword(encryptPassword(userRequestDTO.getPassword()));
-                loginRepository.saveAndFlush(users);
+                loginRepository.save(users);
                 return true;
             } else {
                 throw new FiadoManagerCustomException(HttpStatus.NOT_FOUND, "Usuário já existe");

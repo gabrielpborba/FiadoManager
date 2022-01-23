@@ -1,13 +1,11 @@
 package com.fiadomanager.infrastructure.repository;
 
 import com.fiadomanager.models.domain.OrderSheetProduct;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-@Repository
-public interface OrderSheetProductRepository extends JpaRepository<OrderSheetProduct, Long> {
+public interface OrderSheetProductRepository extends MongoRepository<OrderSheetProduct, Long> {
 
 
     List<OrderSheetProduct> findByIdOrderSheet(Long idOrderSheet);
