@@ -27,6 +27,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private OrderSheetProductRepository orderSheetProductRepository;
 
+    @Autowired
+    private NextSequenceService nextSequenceService;
+
     public NewProductResponseDTO newProduct(NewProductRequestDTO newProductRequestDTO) throws FiadoManagerCustomException {
 
         try {
@@ -42,6 +45,7 @@ public class ProductServiceImpl implements ProductService {
                 }
 
                 Product product = new Product();
+                product.setId(nextSequenceService.getNextSequenceProduct("customSequences_product"));
                 Double valueToDouble = Double.parseDouble(newProductRequestDTO.getValue());
                 product.setValue(valueToDouble);
                 product.setDescription(StringUtils.capitalize(newProductRequestDTO.getDescription()));

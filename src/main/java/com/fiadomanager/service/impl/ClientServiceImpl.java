@@ -6,7 +6,6 @@ import com.fiadomanager.models.dto.clients.ClientResponseDTO;
 import com.fiadomanager.models.dto.clients.NewClientRequestDTO;
 import com.fiadomanager.models.exception.FiadoManagerCustomException;
 import com.fiadomanager.service.ClientService;
-import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -25,6 +24,9 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private OrderSheetServiceImpl orderSheetServiceImpl;
 
+    @Autowired
+    private NextSequenceService nextSequenceService;
+
 
     public boolean newClient(NewClientRequestDTO newClientRequestDTO) throws FiadoManagerCustomException {
         try {
@@ -38,8 +40,9 @@ public class ClientServiceImpl implements ClientService {
                 return true;
             }
 
-            if (Strings.isNullOrEmpty(String.valueOf(newClientRequestDTO.getIdClient()))) {
+            if (null == newClientRequestDTO.getIdClient()) {
                 Client client = new Client();
+                client.setId(nextSequenceService.getNextSequenceClient("customSequences_client"));
                 client.setName(StringUtils.capitalize(newClientRequestDTO.getName()));
                 client.setCellphone(newClientRequestDTO.getCellphone());
                 client.setStatus(1);

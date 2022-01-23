@@ -20,6 +20,9 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private LoginRepository loginRepository;
 
+    @Autowired
+    private NextSequenceService nextSequenceService;
+
 
     public boolean newUser(UserRequestDTO userRequestDTO) throws FiadoManagerCustomException, NoSuchAlgorithmException {
         try {
@@ -28,6 +31,7 @@ public class LoginServiceImpl implements LoginService {
             Users findUser = loginRepository.findByUsername(userRequestDTO.getUsername());
             if (null == findUser) {
                 Users users = new Users();
+                users.setId(nextSequenceService.getNextSequenceUsers("customSequences_users"));
                 users.setUsername(userRequestDTO.getUsername());
                 users.setName(userRequestDTO.getName());
                 users.setPassword(encryptPassword(userRequestDTO.getPassword()));

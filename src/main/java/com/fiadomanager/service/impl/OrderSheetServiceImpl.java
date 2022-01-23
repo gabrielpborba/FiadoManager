@@ -37,6 +37,9 @@ public class OrderSheetServiceImpl implements OrderSheetService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private NextSequenceService nextSequenceService;
+
 
     public OrderSheetResponseDTO getIdOrderSheet(Long idOrderSheet) throws FiadoManagerCustomException {
         try {
@@ -170,6 +173,7 @@ public class OrderSheetServiceImpl implements OrderSheetService {
 
             if (null == orderSheetRequestDTO.getIdOrderSheet() && !client.isEmpty()) {
                 OrderSheet orderSheet = new OrderSheet();
+                orderSheet.setId(nextSequenceService.getNextSequenceOrderSheet("customSequences_orderSheet"));
                 orderSheet.setClient(client.get());
                 orderSheet.setDateCreate(LocalDate.now());
                 orderSheet.setStatus(1);
@@ -177,6 +181,7 @@ public class OrderSheetServiceImpl implements OrderSheetService {
                 if (!orderSheetRequestDTO.getProducts().isEmpty()) {
                     for (ProductDTO productDTO : orderSheetRequestDTO.getProducts()) {
                         OrderSheetProduct orderSheetProduct = new OrderSheetProduct();
+                        orderSheetProduct.setId(nextSequenceService.getNextSequenceOrderSheetProduct("customSequences_orderSheetProduct"));
                         orderSheetProduct.setIdOrderSheet(newOrderSheet.getId());
                         orderSheetProduct.setIdProduct(productDTO.getIdProduct());
                         orderSheetProduct.setQuantity(productDTO.getQuantity());

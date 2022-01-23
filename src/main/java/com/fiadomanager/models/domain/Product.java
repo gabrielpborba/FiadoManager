@@ -1,12 +1,13 @@
 package com.fiadomanager.models.domain;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "PRODUCT")
+@Document(collection = "PRODUCT")
 public class Product {
 
     @Id
