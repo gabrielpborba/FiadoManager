@@ -1,9 +1,8 @@
 spring:
-  datasource:
-    url: jdbc:oracle:thin:@fiadodb.csgygxiw6het.us-east-2.rds.amazonaws.com:1521/DATABASE
-    driver-class-name: oracle.jdbc.OracleDriver
-    username: admin
-    password: Kkk0202#
+  h2:
+  console:
+    enabled: true
+    path: /h2-console
 
 hibernate:
   show_sql: true
