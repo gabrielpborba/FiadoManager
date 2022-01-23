@@ -1,6 +1,7 @@
 package com.fiadomanager.models.domain;
 
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "ORDERSHEET")
+@Document(collection = "ORDERSHEET")
 public class OrderSheet {
 
     @Id

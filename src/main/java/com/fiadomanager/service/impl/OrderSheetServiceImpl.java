@@ -197,6 +197,7 @@ public class OrderSheetServiceImpl implements OrderSheetService {
                 if (!client.isEmpty() && !orderSheet.isEmpty() && !orderSheetRequestDTO.getProducts().isEmpty()) {
                     for (ProductDTO productDTO : orderSheetRequestDTO.getProducts()) {
                         OrderSheetProduct orderSheetProduct = new OrderSheetProduct();
+                        orderSheetProduct.setId(nextSequenceService.getNextSequenceOrderSheetProduct("customSequences_orderSheetProduct"));
                         orderSheetProduct.setIdOrderSheet(orderSheet.get().getId());
                         orderSheetProduct.setIdProduct(productDTO.getIdProduct());
                         orderSheetProduct.setQuantity(productDTO.getQuantity());
