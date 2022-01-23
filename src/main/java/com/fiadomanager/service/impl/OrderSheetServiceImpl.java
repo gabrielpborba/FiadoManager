@@ -41,6 +41,7 @@ public class OrderSheetServiceImpl implements OrderSheetService {
     private NextSequenceService nextSequenceService;
 
 
+
     public OrderSheetResponseDTO getIdOrderSheet(Long idOrderSheet) throws FiadoManagerCustomException {
         try {
             OrderSheetResponseDTO orderSheetResponseDTO = new OrderSheetResponseDTO();
@@ -48,7 +49,7 @@ public class OrderSheetServiceImpl implements OrderSheetService {
             List<ProductDTO> listProductDTO = new ArrayList<>();
             double totalValue = 0l;
 
-            if (! orderSheet.isEmpty()) {
+            if (!orderSheet.isEmpty()) {
                 List<OrderSheetProduct> listOrderSheetProducts = orderSheetProductRepository.findByIdOrderSheet(idOrderSheet);
                 orderSheetResponseDTO.setId(orderSheet.get().getId());
                 orderSheetResponseDTO.setDateCreate(orderSheet.get().getDateCreate());
@@ -56,7 +57,8 @@ public class OrderSheetServiceImpl implements OrderSheetService {
                 orderSheetResponseDTO.setClient(orderSheet.get().getClient());
                 orderSheetResponseDTO.setStatus(orderSheet.get().getStatus());
                 for (OrderSheetProduct orderSheetProduct : listOrderSheetProducts) {
-                    Optional<Product> productFind = orderSheet.get().getProducts().stream().filter(product -> product.getId().equals(orderSheetProduct.getIdProduct())).findAny();
+                    List<Product> findProducts = productRepository.findAll();
+                    Optional<Product> productFind = findProducts.stream().filter(product -> product.getId().equals(orderSheetProduct.getIdProduct())).findAny();
                     ProductDTO productDTO = new ProductDTO();
                     productDTO.setIdProduct(productFind.get().getId());
                     productDTO.setDescription(productFind.get().getDescription());
@@ -131,9 +133,9 @@ public class OrderSheetServiceImpl implements OrderSheetService {
                     orderSheetDTO.setClient(orderSheet.getClient());
                     orderSheetDTO.setStatus(orderSheet.getStatus());
 
-
                     for (OrderSheetProduct orderSheetProduct : listOrderSheetProducts) {
-                        Optional<Product> productFind = orderSheet.getProducts().stream().filter(product -> product.getId().equals(orderSheetProduct.getIdProduct())).findAny();
+                        List<Product> findProducts = productRepository.findAll();
+                        Optional<Product> productFind = findProducts.stream().filter(product -> product.getId().equals(orderSheetProduct.getIdProduct())).findAny();
                         ProductDTO productDTO = new ProductDTO();
                         productDTO.setIdProduct(productFind.get().getId());
                         productDTO.setDescription(productFind.get().getDescription());

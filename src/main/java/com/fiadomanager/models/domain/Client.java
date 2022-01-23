@@ -16,16 +16,12 @@ public class Client {
             name = "SQ_CLIENT",
             sequenceName = "SQ_CLIENT",
             allocationSize = 1)
-    @Column(name = "ID_CLIENT")
     private Long id;
 
-    @Column(name = "NAME")
     private String name;
 
-    @Column(name = "CELLPHONE")
     private String cellphone;
 
-    @Column(name = "STATUS")
     private Integer status;
 
 
